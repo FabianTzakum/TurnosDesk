@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "TurnosDesk.Operator (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "TurnosDesk.Operator (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

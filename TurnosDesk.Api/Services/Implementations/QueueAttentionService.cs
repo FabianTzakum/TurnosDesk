@@ -12,10 +12,15 @@ namespace TurnosDesk.Api.Services.Implementations;
 public sealed class QueueAttentionService : IQueueAttentionService
 {
     private readonly TurnosDeskDbContext _dbContext;
+    private readonly IQueueRealtimeNotifier _queueRealtimeNotifier;
 
-    public QueueAttentionService(TurnosDeskDbContext dbContext)
+    public QueueAttentionService(
+        TurnosDeskDbContext dbContext,
+        IQueueRealtimeNotifier queueRealtimeNotifier
+    )
     {
         _dbContext = dbContext;
+        _queueRealtimeNotifier = queueRealtimeNotifier;
     }
 
     public async Task<ApiResponse<QueueTicketResponse>> CallNextAsync(CallNextQueueTicketRequest request)
@@ -96,9 +101,12 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketCalledAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Turno llamado correctamente."
         );
     }
@@ -159,14 +167,20 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketCalledAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Turno llamado nuevamente correctamente."
         );
     }
 
-    public async Task<ApiResponse<QueueTicketResponse>> StartServiceAsync(int ticketId, StartQueueTicketRequest request)
+    public async Task<ApiResponse<QueueTicketResponse>> StartServiceAsync(
+        int ticketId,
+        StartQueueTicketRequest request
+    )
     {
         var ticket = await GetTicketForUpdateAsync(ticketId);
 
@@ -200,9 +214,12 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketStartedAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Atención iniciada correctamente."
         );
     }
@@ -250,9 +267,12 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketCompletedAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Atención finalizada correctamente."
         );
     }
@@ -300,14 +320,20 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketNoShowAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Turno marcado como no presentado correctamente."
         );
     }
 
-    public async Task<ApiResponse<QueueTicketResponse>> CancelAsync(int ticketId, CancelQueueTicketRequest request)
+    public async Task<ApiResponse<QueueTicketResponse>> CancelAsync(
+        int ticketId,
+        CancelQueueTicketRequest request
+    )
     {
         var ticket = await GetTicketForUpdateAsync(ticketId);
 
@@ -343,9 +369,12 @@ public sealed class QueueAttentionService : IQueueAttentionService
         await _dbContext.SaveChangesAsync();
 
         var updatedTicket = await GetTicketForResponseAsync(ticket.Id);
+        var response = ToResponse(updatedTicket!);
+
+        await _queueRealtimeNotifier.NotifyTicketCancelledAsync(response);
 
         return ApiResponse<QueueTicketResponse>.Ok(
-            ToResponse(updatedTicket!),
+            response,
             "Turno cancelado correctamente."
         );
     }

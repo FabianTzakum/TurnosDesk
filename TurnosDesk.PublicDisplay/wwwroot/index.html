@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>TurnosDesk | Pantalla pública</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Pantalla pública de turnos en tiempo real para TurnosDesk.">
+    <link rel="stylesheet" href="/css/public-display.css">
+</head>
+<body>
+    <main class="display-shell">
+        <section class="display-hero" aria-label="Turno actual">
+            <div class="display-hero__topbar">
+                <div>
+                    <p class="display-hero__eyebrow">TurnosDesk</p>
+                    <h1 class="display-hero__title">Pantalla de atención</h1>
+                </div>
+
+                <div class="connection-status" id="connectionStatus">
+                    <span class="connection-status__dot"></span>
+                    <span class="connection-status__text">Conectando</span>
+                </div>
+            </div>
+
+            <div class="current-ticket" id="currentTicket">
+                <p class="current-ticket__label">Último turno llamado</p>
+                <strong class="current-ticket__folio" id="currentTicketFolio">---</strong>
+                <p class="current-ticket__module" id="currentTicketModule">Esperando llamada de turno</p>
+                <p class="current-ticket__service" id="currentTicketService">La pantalla se actualizará automáticamente.</p>
+            </div>
+        </section>
+
+        <section class="display-grid" aria-label="Información de turnos">
+            <article class="display-card display-card--history">
+                <div class="display-card__header">
+                    <h2 class="display-card__title">Últimos llamados</h2>
+                    <p class="display-card__hint">Actualización en tiempo real</p>
+                </div>
+
+                <ul class="ticket-list" id="ticketHistory">
+                    <li class="ticket-list__empty">Aún no hay turnos llamados en esta sesión.</li>
+                </ul>
+            </article>
+
+            <article class="display-card display-card--notice">
+                <h2 class="display-card__title">Indicaciones</h2>
+
+                <div class="notice-panel">
+                    <p class="notice-panel__main">Por favor, esté atento a su turno.</p>
+                    <p class="notice-panel__text">
+                        Cuando su folio aparezca en pantalla, acuda al módulo indicado.
+                    </p>
+                </div>
+
+                <div class="clock-panel">
+                    <span class="clock-panel__label">Hora actual</span>
+                    <strong class="clock-panel__time" id="currentTime">--:--</strong>
+                </div>
+            </article>
+        </section>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/8.0.7/signalr.min.js"></script>
+    <script src="/js/public-display.config.js"></script>
+    <script src="/js/public-display.js"></script>
+</body>
+</html>

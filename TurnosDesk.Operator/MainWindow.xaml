@@ -1,0 +1,261 @@
+<Window
+    x:Class="TurnosDesk.Operator.MainWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="TurnosDesk Operator">
+
+    <Grid Background="#F3F6FA">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <Border
+            Grid.Row="0"
+            Padding="28,22"
+            Background="#FFFFFF"
+            BorderBrush="#E3E8EF"
+            BorderThickness="0,0,0,1">
+            <Grid ColumnSpacing="18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel>
+                    <TextBlock
+                        Text="TurnosDesk"
+                        Foreground="#0F766E"
+                        FontSize="13"
+                        FontWeight="SemiBold" />
+                    <TextBlock
+                        Text="Panel de asesor"
+                        Foreground="#101828"
+                        FontSize="30"
+                        FontWeight="Bold" />
+                    <TextBlock
+                        Text="Opera la cola de atención, llama turnos y actualiza el estado del servicio."
+                        Foreground="#667085"
+                        FontSize="14"
+                        Margin="0,6,0,0" />
+                </StackPanel>
+
+                <Border
+                    Grid.Column="1"
+                    Padding="14,9"
+                    CornerRadius="18"
+                    Background="#ECFDF3"
+                    VerticalAlignment="Center">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <Ellipse
+                            Width="9"
+                            Height="9"
+                            Fill="#12B76A"
+                            VerticalAlignment="Center" />
+                        <TextBlock
+                            x:Name="RealtimeStatusText"
+                            Text="Conectando SignalR"
+                            Foreground="#067647"
+                            FontWeight="SemiBold" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <Grid
+            Grid.Row="1"
+            Padding="28"
+            ColumnSpacing="22">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="360" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Column="0"
+                Background="#FFFFFF"
+                CornerRadius="24"
+                BorderBrush="#E3E8EF"
+                BorderThickness="1"
+                Padding="22">
+                <ScrollViewer>
+                    <StackPanel Spacing="18">
+                        <StackPanel Spacing="6">
+                            <TextBlock
+                                Text="Configuración de atención"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="#101828" />
+                            <TextBlock
+                                Text="Selecciona la sucursal, módulo y servicio antes de operar la cola."
+                                TextWrapping="Wrap"
+                                Foreground="#667085" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="7">
+                            <TextBlock Text="Sucursal" FontWeight="SemiBold" />
+                            <ComboBox
+                                x:Name="BranchComboBox"
+                                DisplayMemberPath="Name"
+                                PlaceholderText="Seleccionar sucursal"
+                                HorizontalAlignment="Stretch"
+                                SelectionChanged="BranchComboBox_SelectionChanged" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="7">
+                            <TextBlock Text="Módulo de atención" FontWeight="SemiBold" />
+                            <ComboBox
+                                x:Name="ModuleComboBox"
+                                DisplayMemberPath="Name"
+                                PlaceholderText="Seleccionar módulo"
+                                HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="7">
+                            <TextBlock Text="Servicio a atender" FontWeight="SemiBold" />
+                            <ComboBox
+                                x:Name="ServiceTypeComboBox"
+                                DisplayMemberPath="Name"
+                                PlaceholderText="Todos los servicios"
+                                HorizontalAlignment="Stretch" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="7">
+                            <TextBlock Text="Nombre del asesor" FontWeight="SemiBold" />
+                            <TextBox
+                                x:Name="OperatorNameTextBox"
+                                PlaceholderText="Ej. Asesor demo"
+                                Text="Asesor demo" />
+                        </StackPanel>
+
+                        <Button
+                            Content="Cargar datos"
+                            Click="LoadDataButton_Click"
+                            HorizontalAlignment="Stretch" />
+
+                        <TextBlock
+                            x:Name="StatusMessageText"
+                            Text="Listo para conectar con TurnosDesk.Api."
+                            TextWrapping="Wrap"
+                            Foreground="#667085" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+
+            <Grid
+                Grid.Column="1"
+                RowSpacing="22">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <Border
+                    Grid.Row="0"
+                    Background="#0B1220"
+                    CornerRadius="30"
+                    Padding="30">
+                    <Grid ColumnSpacing="22">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel>
+                            <TextBlock
+                                Text="Turno actual"
+                                Foreground="#9CA3AF"
+                                FontSize="15"
+                                FontWeight="SemiBold" />
+                            <TextBlock
+                                x:Name="CurrentTicketFolioText"
+                                Text="---"
+                                Foreground="#FFFFFF"
+                                FontSize="92"
+                                FontWeight="Bold" />
+                            <TextBlock
+                                x:Name="CurrentTicketDetailText"
+                                Text="Aún no hay turno en atención."
+                                Foreground="#D1D5DB"
+                                FontSize="18"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+
+                        <StackPanel
+                            Grid.Column="1"
+                            Width="240"
+                            Spacing="10"
+                            VerticalAlignment="Center">
+                            <Button
+                                Content="Llamar siguiente"
+                                Click="CallNextButton_Click"
+                                HorizontalAlignment="Stretch" />
+                            <Button
+                                Content="Iniciar atención"
+                                Click="StartServiceButton_Click"
+                                HorizontalAlignment="Stretch" />
+                            <Button
+                                Content="Finalizar atención"
+                                Click="CompleteServiceButton_Click"
+                                HorizontalAlignment="Stretch" />
+                            <Button
+                                Content="No presentado"
+                                Click="NoShowButton_Click"
+                                HorizontalAlignment="Stretch" />
+                            <Button
+                                Content="Cancelar turno"
+                                Click="CancelButton_Click"
+                                HorizontalAlignment="Stretch" />
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <Border
+                    Grid.Row="1"
+                    Background="#FFFFFF"
+                    CornerRadius="24"
+                    BorderBrush="#E3E8EF"
+                    BorderThickness="1"
+                    Padding="22">
+                    <Grid RowSpacing="14">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+
+                        <StackPanel>
+                            <TextBlock
+                                Text="Eventos recientes"
+                                FontSize="20"
+                                FontWeight="Bold"
+                                Foreground="#101828" />
+                            <TextBlock
+                                Text="Registro visual de actividad recibida por SignalR y acciones del asesor."
+                                Foreground="#667085"
+                                Margin="0,4,0,0" />
+                        </StackPanel>
+
+                        <ListView
+                            x:Name="EventsListView"
+                            Grid.Row="1">
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel Padding="0,8">
+                                        <TextBlock
+                                            Text="{Binding Title}"
+                                            FontWeight="SemiBold"
+                                            Foreground="#101828" />
+                                        <TextBlock
+                                            Text="{Binding Description}"
+                                            Foreground="#667085"
+                                            TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                        </ListView>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+    </Grid>
+</Window>
